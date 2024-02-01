@@ -1,0 +1,808 @@
+---
+title: "Resampling"
+author: "Your Name Here"
+date: "2024-1-30"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE,message=FALSE,fig.align="center",fig.width=7,fig.height=2.5)
+
+```
+
+
+```{css}
+.btn {
+    border-width: 0 0px 0px 0px;
+    font-weight: normal;
+    text-transform: ;
+}
+
+.btn-default {
+    color: #2ecc71;
+    background-color: #ffffff;
+    border-color: #ffffff;
+}
+```
+
+
+# Class Workbook {.tabset .tabset-fade .tabset-pills}
+
+## In class activity
+```{python}
+import numpy as np
+import pandas as pd
+import math
+from matplotlib.pyplot import subplots
+#import statsmodels.api as sm
+from plotnine import *
+import plotly.express as px
+import statsmodels.formula.api as sm
+from ISLP import load_data
+from ISLP.models import (ModelSpec as MS,
+                        summarize ,
+                        poly)
+```
+
+### Ames House Data
+
+```{python}
+ames_raw=pd.read_csv("ames_raw.csv")
+```
+
+Let's revisit the AmesHousing data.  As we did in the previous class, I will split the data into before 2008 and after.  The data up to 2008 will be the training data and after 2008 will be the testing data.
+
+```{python}
+ames_raw_2009, ames_raw_2008= ames_raw.query('`Yr Sold`>=2008').copy(), ames_raw.query('`Yr Sold` <2008').copy()
+```
+
+
+
+* For the regression model fit, use bootstrap to compare the standard error estimates to the model based estimates.
+
+
+Your code:
+
+```{python,echo=TRUE}
+#
+#
+```
+
+Your answer:
+
+~~~
+Please write your answer in full sentences.
+
+
+~~~
+
+
+* Use cross validation  to decide which model has a good predictive accuracy.  Does the result hold true for the prediction of future data?
+
+Your code:
+
+```{python,echo=TRUE}
+#
+#
+```
+
+Your answer:
+
+~~~
+Please write your answer in full sentences.
+
+
+~~~
+
+
+* Using `knn.reg` fit KNN regression model.  Use cross validation to decide which K to use.
+
+Your code:
+
+```{python,echo=TRUE}
+#
+#
+```
+
+Your answer:
+
+~~~
+Please write your answer in full sentences.
+
+
+~~~
+
+
+* Which model performs better on your training data?  Which model performs better in your future prediction?
+
+Your code:
+
+```{python,echo=TRUE}
+#
+#
+```
+
+Your answer:
+
+~~~
+Please write your answer in full sentences.
+
+
+~~~
+
+## Problem Set
+
+### Bootstrap
+
+We will now investigate numerically the probability that a bootstrap sample of size n = 100 contains the jth observation. Here j = 4. We first create an array store with values that will subsequently
+be overwritten using the function np.empty(). We then repeatedly create bootstrap samples, and each time we record whether or not the fifth observation is contained in the bootstrap
+sample.
+
+We will investigate numerically the probability that a bootstrap sample of size n = 100 contains the jth observation. Here j = 4. We repeatedly create bootstrap samples, and each time
+we record whether or not the fourth observation is contained in the bootstrap sample.
+
+Here is the code to get you going
+```{python,echo =TRUE,eval=FALSE}
+
+rng = np.random.default_rng (10)
+store = np.empty (10000)
+for i in range (10000):
+    store[i] = np.sum(rng.choice(100, 100, replace=True) == 4) > 0
+  
+  
+np.mean(store)
+```
+
+Comment on the results obtained.
+
+
+Your code:
+
+```{python,echo=TRUE}
+#
+#
+```
+
+Your answer:
+
+~~~
+Please write your answer in full sentences.
+
+
+~~~
+
+
+### CV
+
+We will now perform cross-validation on a simulated data set.
+(a) Generate a simulated data set as follows:
+
+```{python,eval=FALSE, echo =TRUE}
+rng = np.random.default_rng(1)
+x = rng.normal(size=100)
+y = x - 2 * x**2 + rng.normal(size=100)
+```
+
+In this data set, what is n and what is p? Write out the model
+used to generate the data in equation form.
+
+
+Your code:
+
+```{python,echo=TRUE}
+#
+#
+```
+
+Your answer:
+
+~~~
+Please write your answer in full sentences.
+
+
+~~~
+
+
+(b) Create a scatterplot of X against Y . Comment on what you find.
+
+
+Your code:
+
+```{python,echo=TRUE}
+#
+#
+```
+
+Your answer:
+
+~~~
+Please write your answer in full sentences.
+
+
+~~~
+
+(c) Set a random seed, and then compute the LOOCV errors that result from fitting the following four models using least squares:
+
+i.   $Y = \beta_0 + \beta_1X + \epsilon$
+ii.  $Y = \beta_0 + \beta_1X + \beta_2X^2 + \epsilon$
+iii. $Y = \beta_0 + \beta_1X + \beta_2X^2 + \beta_3X^3 + \epsilon$
+iv.  $Y = \beta_0 + \beta_1X + \beta_2X^2 + \beta_3X^3 + \beta_4X^4 + \epsilon$.
+
+Note you may find it helpful to use the `data.frame()` function
+to create a single data set containing both $X$ and $Y$ .
+
+
+Your code:
+
+```{python,echo=TRUE}
+#
+#
+```
+
+Your answer:
+
+~~~
+Please write your answer in full sentences.
+
+
+~~~
+
+
+(d) Repeat (c) using another random seed, and report your results.
+Are your results the same as what you got in (c)? Why?
+
+Your code:
+
+```{python,echo=TRUE}
+#
+#
+```
+
+Your answer:
+
+~~~
+Please write your answer in full sentences.
+
+
+~~~
+
+(e) Which of the models in (c) had the smallest LOOCV error? Is this what you expected? Explain your answer.
+
+Your code:
+
+```{python,echo=TRUE}
+#
+#
+```
+
+Your answer:
+
+~~~
+Please write your answer in full sentences.
+
+
+~~~
+
+
+(f) Comment on the statistical significance of the coefficient estimates that results from fitting each of the models in (c) using least squares. Do these results agree with the conclusions drawn based on the cross-validation results?
+
+
+Your code:
+
+```{python,echo=TRUE}
+#
+#
+```
+
+Your answer:
+
+~~~
+Please write your answer in full sentences.
+
+
+~~~
+
+
+
+
+### Default 1
+
+In Chapter 4, we used logistic regression to predict the probability of default using income and balance on the `Default` data set. We will now estimate the test error of this logistic regression model using the validation set approach. Do not forget to set a random seed before beginning your analysis.
+
+(a) Fit a logistic regression model that uses income and balance to predict default.
+
+Your code:
+
+```{python,echo=TRUE}
+#
+#
+```
+
+Your answer:
+
+~~~
+Please write your answer in full sentences.
+
+
+~~~
+
+
+(b) Using the validation set approach, estimate the test error of this model. In order to do this, you must perform the following steps:
+
+i. Split the sample set into a training set and a validation set.
+
+Your code:
+
+```{python,echo=TRUE}
+#
+#
+```
+
+Your answer:
+
+~~~
+Please write your answer in full sentences.
+
+
+~~~
+
+ii. Fit a multiple logistic regression model using only the training observations.
+
+Your code:
+
+```{python,echo=TRUE}
+#
+#
+```
+
+Your answer:
+
+~~~
+Please write your answer in full sentences.
+
+
+~~~
+
+
+iii. Obtain a prediction of default status for each individual in the validation set by computing the posterior probability of default for that individual, and classifying the individual to the default category if the posterior probability is greater than 0.5.
+
+
+Your code:
+
+```{python,echo=TRUE}
+#
+#
+```
+
+Your answer:
+
+~~~
+Please write your answer in full sentences.
+
+
+~~~
+
+
+iv. Compute the validation set error, which is the fraction of the observations in the validation set that are misclassified.
+
+Your code:
+
+```{python,echo=TRUE}
+#
+#
+```
+
+Your answer:
+
+~~~
+Please write your answer in full sentences.
+
+
+~~~
+
+
+(c) Repeat the process in (b) three times, using three different splits of the observations into a training set and a validation set. Comment on the results obtained.
+
+
+Your code:
+
+```{python,echo=TRUE}
+#
+#
+```
+
+Your answer:
+
+~~~
+Please write your answer in full sentences.
+
+
+~~~
+
+
+(d) Now consider a logistic regression model that predicts the probability of default using income, balance, and a dummy variable for student. Estimate the test error for this model using the validation set approach. Comment on whether or not including a dummy variable for student leads to a reduction in the test error rate.
+
+
+Your code:
+
+```{python,echo=TRUE}
+#
+#
+```
+
+Your answer:
+
+~~~
+Please write your answer in full sentences.
+
+
+~~~
+
+
+### Default 2
+
+We continue to consider the use of a logistic regression model to
+predict the probability of default using income and balance on the
+Default data set. In particular, we will now compute estimates for the
+standard errors of the income and balance logistic regression coefficients
+in two different ways: (1) using the bootstrap, and (2) using the
+standard formula for computing the standard errors in the sm.GLM()
+function. Do not forget to set a random seed before beginning your
+analysis.
+
+(a) Using the `summarize()` and `sm.GLM()` functions, determine the
+estimated standard errors for the coefficients associated with
+income and balance in a multiple logistic regression model that
+uses both predictors.
+Your code:
+
+```{python,echo=TRUE}
+#
+#
+```
+
+Your answer:
+
+~~~
+Please write your answer in full sentences.
+
+
+~~~
+
+
+(b) Write a function, `boot_fn()`, that takes as input the Default data
+set as well as an index of the observations, and that outputs
+the coefficient estimates for income and balance in the multiple
+logistic regression model.
+
+Your code:
+
+```{python,echo=TRUE}
+#
+#
+```
+
+Your answer:
+
+~~~
+Please write your answer in full sentences.
+
+
+~~~
+
+(c) Following the bootstrap example in the lab, use your `boot_fn()`
+function to estimate the standard errors of the logistic regression
+coefficients for income and balance.
+
+
+Your code:
+
+```{python,echo=TRUE}
+#
+#
+```
+
+Your answer:
+
+~~~
+Please write your answer in full sentences.
+
+
+~~~
+
+
+(d) Comment on the estimated standard errors obtained using the `sm.GLM()` function and using the bootstrap.
+
+Your answer:
+
+~~~
+Please write your answer in full sentences.
+
+
+~~~
+
+
+### Boston housing data set
+
+We will now consider the Boston housing data set, from the ISLR library.
+
+```{python}
+Boston = load_data("Boston")
+```
+
+(a) Based on this data set, provide an estimate for the population mean of medv. Call this estimate $\hat{\mu}$.
+
+Your code:
+
+```{python,echo=TRUE}
+#
+#
+```
+
+Your answer:
+
+~~~
+Please write your answer in full sentences.
+
+
+~~~
+
+
+(b) Provide an estimate of the standard error of $\hat{\mu}$. Interpret this result.
+Hint: We can compute the standard error of the sample mean by dividing the sample standard deviation by the square root of the number of observations.
+
+Your code:
+
+```{python,echo=TRUE}
+#
+#
+```
+
+Your answer:
+
+~~~
+Please write your answer in full sentences.
+
+
+~~~
+
+
+(c) Now estimate the standard error of $\hat{\mu}$ using the bootstrap. How does this compare to your answer from (b)?
+
+Your code:
+
+```{python,echo=TRUE}
+#
+#
+```
+
+Your answer:
+
+~~~
+Please write your answer in full sentences.
+
+
+~~~
+
+(d) Based on your bootstrap estimate from (c), provide a 95 % confidence
+interval for the mean of medv. Compare it to the results
+obtained by using `Boston['medv'].std()` and the two standard
+error rule (3.9).
+Hint: You can approximate a 95% confidence interval using the formula $[\hat{\mu} − 2SE(\hat{\mu}), \hat{\mu} + 2SE(\hat{\mu})]$.
+
+Your code:
+
+```{python,echo=TRUE}
+#
+#
+```
+
+Your answer:
+
+~~~
+Please write your answer in full sentences.
+
+
+~~~
+
+
+(e) Based on this data set, provide an estimate, $\hat{\mu}_{med}$, for the median value of medv in the population.
+
+Your code:
+
+```{python,echo=TRUE}
+#
+#
+```
+
+Your answer:
+
+~~~
+Please write your answer in full sentences.
+
+
+~~~
+
+
+(f) We now would like to estimate the standard error of $\hat{\mu}_{med}$. Unfortunately, there is no simple formula for computing the standard error of the median. Instead, estimate the standard error of the median using the bootstrap. Comment on your findings.
+
+Your code:
+
+```{python,echo=TRUE}
+#
+#
+```
+
+Your answer:
+
+~~~
+Please write your answer in full sentences.
+
+
+~~~
+
+
+
+(g) Based on this data set, provide an estimate for the tenth percentile
+of medv in Boston census tracts. Call this quantity $\hat{\mu}_{0.1}$.
+(You can use the `np.percentile()` function.)
+
+Your code:
+
+```{python,echo=TRUE}
+#
+#
+```
+
+Your answer:
+
+~~~
+Please write your answer in full sentences.
+
+
+~~~
+
+
+(h) Use the bootstrap to estimate the standard error of $\hat{\mu}_{0.1}$. Comment on your findings.
+
+Your code:
+
+```{python,echo=TRUE}
+#
+#
+```
+
+Your answer:
+
+~~~
+Please write your answer in full sentences.
+
+
+~~~
+
+
+## Additional Material
+
+### Cross Validation for Predictive Modeling Platforms in Python
+
+#### scikit-learn
+
+Using platforms like scikit-learn is helpful for things such as cross validation.
+There are variants of CV implemented to be used off the shelf
+https://scikit-learn.org/stable/modules/cross_validation.html
+
+There are many metrics you can choose from
+https://scikit-learn.org/stable/modules/model_evaluation.html#scoring-parameter
+
+```{python, echo=TRUE}
+ames_raw_comp=ames_raw.loc[:,["SalePrice","Gr Liv Area","Lot Area","Total Bsmt SF"]].dropna()
+X=ames_raw_comp.loc[:,["Gr Liv Area","Lot Area","Total Bsmt SF"]]
+y=ames_raw_comp.loc[:,"SalePrice"]
+from sklearn.model_selection import cross_val_score, cross_validate
+from sklearn import svm
+from sklearn.linear_model import LinearRegression
+clf =  LinearRegression()
+## One metric
+scores = cross_val_score(clf, X, y, cv=5,scoring="r2")
+## Multiple metrics
+scoring = ['r2', 'max_error']
+scores = cross_validate(clf, X, y, scoring=scoring)
+```
+
+#### PySpark
+
+[Apache Spark](https://spark.apache.org/docs/3.1.3/api/python/index.html) is a popular large data handling platform.  Over the years, they built Machine Learning capabilities in MLlib.
+
+```{python,eval=FALSE, echo=TRUE}
+import pyspark
+from pyspark.sql import SparkSession
+from pyspark.ml.classification import LogisticRegression
+from pyspark.ml.evaluation import BinaryClassificationEvaluator
+from pyspark.ml.linalg import Vectors
+from pyspark.ml.tuning import CrossValidator, ParamGridBuilder, CrossValidatorModel
+import tempfile
+
+```
+
+```{python,eval=FALSE, echo=TRUE}
+spark = SparkSession.builder.appName("CV_test").getOrCreate()
+```
+
+```{python,eval=FALSE, echo=TRUE}
+dataset = spark.createDataFrame(
+    [(Vectors.dense([0.0]), 0.0),
+     (Vectors.dense([0.4]), 1.0),
+     (Vectors.dense([0.5]), 0.0),
+     (Vectors.dense([0.6]), 1.0),
+     (Vectors.dense([1.0]), 1.0)] * 10,
+    ["features", "label"])
+lr = LogisticRegression()
+grid = ParamGridBuilder().addGrid(lr.maxIter, [0, 1]).build()
+evaluator = BinaryClassificationEvaluator()
+cv = CrossValidator(estimator=lr, estimatorParamMaps=grid, evaluator=evaluator,
+    parallelism=2)
+cvModel = cv.fit(dataset)
+cvModel.getNumFolds()
+cvModel.avgMetrics[0]
+evaluator.evaluate(cvModel.transform(dataset))
+```
+
+```{python,eval=FALSE, echo=TRUE}
+spark.stop()
+```
+
+#### Resampling  using h2o
+
+On H2O cross validation is embedded in the function calling so you don't need to worry about learning a new wrapper on top of your estimator.
+https://docs.h2o.ai/h2o/latest-stable/h2o-docs/cross-validation.html
+
+```{python,eval=FALSE, echo=TRUE}
+
+#pip install requests
+#pip install tabulate
+#pip uninstall h2o
+#pip install -f http://h2o-release.s3.amazonaws.com/h2o/latest_stable_Py.html h2o
+# load packages and data
+import h2o
+from h2o.estimators.glm import H2OGeneralizedLinearEstimator
+```
+
+
+##### Starting H2O
+
+To use H2O you need to instantiate it.
+
+```{python,eval=FALSE, echo=TRUE}
+# nthreads specifies number of threads. -1 means use all the CPU cores.
+# max_mem_size specifies the maximum amount of RAM to use.
+localH2O= h2o.init(nthreads = -1, max_mem_size="4g")
+```
+
+##### CV with  H2O
+
+```{python,eval=FALSE, echo=TRUE}
+
+# Import the prostate dataset
+prostate = h2o.import_file("http://s3.amazonaws.com/h2o-public-test-data/smalldata/prostate/prostate.csv.zip")
+
+# Set the predictor names and the response column name
+response = "CAPSULE"
+predictors = prostate.names[3:8]
+
+# Convert the response column to a factor
+prostate['CAPSULE'] = prostate['CAPSULE'].asfactor()
+
+# Train a GBM model setting nfolds to 5
+prostate_gbm = H2OGeneralizedLinearEstimator(nfolds = 5, seed = 1)
+prostate_gbm.train(x=predictors, y=response, training_frame=prostate)
+
+# AUC of cross-validated holdout predictions
+prostate_gbm.auc(xval=True)
+```
+
+##### Shut down H2O
+```{python,eval=FALSE, echo=TRUE}
+h2o.cluster().shutdown(prompt =False)
+```
+
+
